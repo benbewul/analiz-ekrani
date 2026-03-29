@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask, render_template, request
 
 app = Flask(__name__)
@@ -109,4 +111,6 @@ def dashboard():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    debug = os.environ.get("FLASK_DEBUG", "1").lower() in ("1", "true", "yes")
+    port = int(os.environ.get("PORT", "5000"))
+    app.run(host="0.0.0.0", port=port, debug=debug)
