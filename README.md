@@ -6,8 +6,10 @@ Vodafone temalı, veritabanına bağlanmayan demo sürümüdür. BA_ID girildiğ
 - `app.py` → Flask demo uygulaması
 - `templates/index.html` → arayüz
 - `static/style.css` → Vodafone temalı stil
-- `Dockerfile` → container build dosyası
-- `Jenkinsfile` → OpenShift deploy pipeline
+- `Dockerfile` → container (Gunicorn, 8080)
+- `openshift/application.yaml` → Deployment + Service + Route (şablon)
+- `openshift/networkpolicy.yaml` → uygulama pod’larına 8080 ingress
+- `Jenkinsfile` → image build + `oc apply` ile deploy
 - `.dockerignore` → gereksiz dosyaları build dışı bırakır
 
 ## Local çalıştırma

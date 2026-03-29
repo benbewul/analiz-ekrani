@@ -1,0 +1,70 @@
+# Yer tutucular: __APP_NAME__, __IMAGE__ (Jenkins sed ile doldurur)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: __APP_NAME__
+  labels:
+    app: __APP_NAME__
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: __APP_NAME__
+  template:
+    metadata:
+      labels:
+        app: __APP_NAME__
+    spec:
+      containers:
+        - name: __APP_NAME__
+          image: __IMAGE__
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          env:
+            - name: PORT
+              value: "8080"
+            - name: PYTHONUNBUFFERED
+              value: "1"
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 5
+            timeoutSeconds: 5
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: __APP_NAME__
+  labels:
+    app: __APP_NAME__
+spec:
+  selector:
+    app: __APP_NAME__
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
+      protocol: TCP
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: __APP_NAME__
+  labels:
+    app: __APP_NAME__
+spec:
+  to:
+    kind: Service
+    name: __APP_NAME__
+    weight: 100
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Allow
