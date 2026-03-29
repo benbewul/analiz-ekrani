@@ -130,7 +130,7 @@ body{
   transition:border-color .15s;background:#fff;
 }
 .search-input-wrap:focus-within{border-color:var(--vf-red)}
-.search-icon{font-size:16px;color:var(--muted);flex-shrink:0}
+.search-icon{width:18px;height:18px;color:#c5c9d6;flex-shrink:0}
 .search-input-wrap input{
   flex:1;border:none;outline:none;padding:12px 0;font-size:14px;
   font-family:inherit;background:transparent;
