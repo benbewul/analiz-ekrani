@@ -3,30 +3,34 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>PCC ActionBoard (Demo)</title>
+  <title>PCC ActionBoard</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
   <div class="layout">
+    <div class="topbar">
+      <img class="topbar-logo" src="{{ url_for('static', filename='vodafone-logo.png') }}" alt="Vodafone" height="36" decoding="async">
+    </div>
+    <div class="body-row">
     <aside class="sidebar">
-      <div class="brand">
-        <img class="brand-logo" src="{{ url_for('static', filename='vodafone-logo.png') }}" alt="Vodafone" width="56" height="56" decoding="async">
-        <div class="brand-text">
-          <div class="brand-name" aria-label="Vodafone">vodafone</div>
-          <div class="brand-sub">PCC ActionBoard · Demo</div>
-        </div>
-      </div>
-
       <nav class="menu">
         <a class="menu-item active" href="#">Dashboard</a>
-        <a class="menu-item" href="#">BA overview</a>
-        <a class="menu-item" href="#">Aksiyon Geçmişi</a>
-        <a class="menu-item" href="#">Öneriler</a>
+        <a class="menu-item" href="#">BA Overview</a>
+        <a class="menu-item" href="#">Aksiyon Gecmisi</a>
+        <a class="menu-item" href="#">Oneriler</a>
       </nav>
 
-      <div class="sidebar-note">
-        <strong>Demo Notu</strong>
-        <p>Bu sürüm veritabanına bağlanmaz. Hazır örnek senaryolarla arayüzü gösterir.</p>
+      <div class="sidebar-ids">
+        <strong>Ornek BA_ID'ler</strong>
+        <div class="id-chips">
+          <span class="id-chip">6092902934</span>
+          <span class="id-chip">6070166156</span>
+          <span class="id-chip">6111111111</span>
+          <span class="id-chip">6222222222</span>
+          <span class="id-chip">6333333333</span>
+          <span class="id-chip">6444444444</span>
+          <span class="id-chip">6555555555</span>
+        </div>
       </div>
     </aside>
 
@@ -35,64 +39,71 @@
         <div>
           <div class="eyebrow">Collection Decision Support</div>
           <h1>PCC ActionBoard</h1>
-          <p>BA_ID bazlı publish, invoice, payment, BPPS ve action akışını tek ekranda yorumlayan demo arayüz.</p>
+          <p>BA_ID bazli publish, invoice, payment, BPPS ve activity akisini tek ekranda analiz eder; runbook kurallarina gore oneri uretir.</p>
         </div>
-        <div class="hero-badge">Demo v1</div>
       </header>
 
       <section class="search-panel">
         <form method="post" class="search-form">
-          <label for="ba_id">BA_ID</label>
+          <label for="ba_id">BA_ID girin</label>
           <div class="search-row">
-            <input id="ba_id" name="ba_id" type="text" placeholder="Örnek: 6092902934 veya 6070166156" value="{{ ba_id }}">
+            <input id="ba_id" name="ba_id" type="text" placeholder="Ornek: 6092902934" value="{{ ba_id }}" autocomplete="off">
             <button type="submit">Analiz Et</button>
           </div>
-          <div class="search-help">Hazır mock senaryolar: <code>6092902934</code> ve <code>6070166156</code></div>
         </form>
       </section>
 
       {% if result %}
       <section class="summary {{ result.summary_type }}">
-        <div class="summary-title">{{ result.summary_title }}</div>
-        <p>{{ result.summary_text }}</p>
+        <div class="summary-icon">
+          {% if result.summary_type == 'success' %}&#10003;
+          {% elif result.summary_type == 'warning' %}&#9888;
+          {% elif result.summary_type == 'danger' %}&#10007;
+          {% elif result.summary_type == 'info' %}&#8505;
+          {% else %}&#8226;{% endif %}
+        </div>
+        <div>
+          <div class="summary-title">{{ result.summary_title }}</div>
+          <p>{{ result.summary_text }}</p>
+        </div>
       </section>
 
       <section class="cards">
         {% for card in result.cards %}
-        <article class="card">
-          <div class="card-title">{{ card.title }}</div>
-          <div class="pill {{ card.status }}">{{ card.value }}</div>
+        <article class="card {{ card.status }}">
+          <div class="card-label">{{ card.title }}</div>
+          <div class="card-value">{{ card.value }}</div>
         </article>
         {% endfor %}
       </section>
 
       <section class="grid two">
         <article class="panel">
-          <div class="panel-title">Son Actionlar</div>
+          <div class="panel-header">
+            <div class="panel-title">Son Aksiyonlar</div>
+            <span class="panel-badge">K_EAI_QUEUE_PUBLISH</span>
+          </div>
           <table>
-            <thead>
-              <tr>
-                <th>Action ID</th>
-                <th>Action</th>
-                <th>Status</th>
-                <th>Tarih</th>
-              </tr>
-            </thead>
+            <thead><tr><th>Action ID</th><th>Action</th><th>Status</th><th>Tarih</th></tr></thead>
             <tbody>
               {% for row in result.actions %}
               <tr>
                 <td>{{ row.action_id }}</td>
                 <td>{{ row.action_name }}</td>
-                <td><span class="status-chip {{ row.status_text|lower }}">{{ row.status_text }}</span></td>
+                <td><span class="chip {{ row.status_text|lower }}">{{ row.status_text }}</span></td>
                 <td>{{ row.date }}</td>
               </tr>
               {% endfor %}
+              {% if not result.actions %}<tr><td colspan="4" class="empty">Kayit yok</td></tr>{% endif %}
             </tbody>
           </table>
         </article>
 
-        <article class="panel">
-          <div class="panel-title">Sistem Önerisi</div>
+        <article class="panel recommendation-panel">
+          <div class="panel-header">
+            <div class="panel-title">Sistem Onerisi</div>
+            <span class="panel-badge">Runbook</span>
+          </div>
           <ul class="recommendations">
             {% for item in result.recommendations %}
             <li>{{ item }}</li>
@@ -101,59 +112,67 @@
         </article>
       </section>
 
-      <section class="grid two">
+      <section class="grid three">
         <article class="panel">
-          <div class="panel-title">Invoice</div>
+          <div class="panel-header">
+            <div class="panel-title">Invoice</div>
+            <span class="panel-badge">PCC_INVOICE</span>
+          </div>
           <table>
-            <thead>
-              <tr>
-                <th>INV_NUMBER</th>
-                <th>REQUEST_STATUS</th>
-                <th>DUE_DATE</th>
-                <th>AMOUNT</th>
-              </tr>
-            </thead>
+            <thead><tr><th>INV_NUMBER</th><th>STATUS</th><th>DUE_DATE</th><th>AMOUNT</th></tr></thead>
             <tbody>
               {% if result.invoice_rows %}
                 {% for row in result.invoice_rows %}
                 <tr>
-                  <td>{{ row.inv_number }}</td>
-                  <td>{{ row.request_status }}</td>
+                  <td class="mono">{{ row.inv_number }}</td>
+                  <td><span class="chip {% if row.request_status == 0 %}danger{% elif row.request_status == 4 %}warning{% else %}info{% endif %}">{{ row.request_status }}</span></td>
                   <td>{{ row.inv_due_date }}</td>
                   <td>{{ row.amount }}</td>
                 </tr>
                 {% endfor %}
-              {% else %}
-                <tr><td colspan="4" class="empty">Kayıt yok</td></tr>
-              {% endif %}
+              {% else %}<tr><td colspan="4" class="empty">Kayit yok</td></tr>{% endif %}
             </tbody>
           </table>
         </article>
 
         <article class="panel">
-          <div class="panel-title">BPPS Bill</div>
+          <div class="panel-header">
+            <div class="panel-title">BPPS Bill</div>
+            <span class="panel-badge">BPPS.BILL</span>
+          </div>
           <table>
-            <thead>
-              <tr>
-                <th>BILL_NUMBER</th>
-                <th>BILL_STATUS</th>
-                <th>PAY_DATE</th>
-                <th>AMOUNT</th>
-              </tr>
-            </thead>
+            <thead><tr><th>BILL_NUMBER</th><th>STATUS</th><th>PAY_DATE</th><th>AMOUNT</th></tr></thead>
             <tbody>
               {% if result.bpps_rows %}
                 {% for row in result.bpps_rows %}
                 <tr>
-                  <td>{{ row.bill_number }}</td>
-                  <td>{{ row.bill_status }}</td>
+                  <td class="mono">{{ row.bill_number }}</td>
+                  <td><span class="chip {% if row.bill_status == 1 %}warning{% else %}info{% endif %}">{{ row.bill_status }}</span></td>
                   <td>{{ row.pay_date }}</td>
                   <td>{{ row.amount }}</td>
                 </tr>
                 {% endfor %}
-              {% else %}
-                <tr><td colspan="4" class="empty">Kayıt yok</td></tr>
-              {% endif %}
+              {% else %}<tr><td colspan="4" class="empty">Kayit yok</td></tr>{% endif %}
+            </tbody>
+          </table>
+        </article>
+
+        <article class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Activity</div>
+            <span class="panel-badge">ACCOUNTACTIVITYPUBLISH</span>
+          </div>
+          <table>
+            <thead><tr><th>MOC_BAR</th><th>Not</th></tr></thead>
+            <tbody>
+              {% if result.activity_rows %}
+                {% for row in result.activity_rows %}
+                <tr>
+                  <td><span class="chip {% if row.moc_bar == 9 %}danger{% else %}info{% endif %}">{{ row.moc_bar }}</span></td>
+                  <td>{{ row.note }}</td>
+                </tr>
+                {% endfor %}
+              {% else %}<tr><td colspan="2" class="empty">Kayit yok</td></tr>{% endif %}
             </tbody>
           </table>
         </article>
@@ -161,63 +180,56 @@
 
       <section class="grid two">
         <article class="panel">
-          <div class="panel-title">PCC Payment</div>
+          <div class="panel-header">
+            <div class="panel-title">PCC Payment</div>
+            <span class="panel-badge">PCC_PAYMENT</span>
+          </div>
           <table>
-            <thead>
-              <tr>
-                <th>PYMNT_INV_ID</th>
-                <th>PYMNT_BA_ID</th>
-                <th>Durum</th>
-              </tr>
-            </thead>
+            <thead><tr><th>PYMNT_INV_ID</th><th>PYMNT_BA_ID</th><th>Durum</th></tr></thead>
             <tbody>
               {% if result.payment_rows %}
                 {% for row in result.payment_rows %}
                 <tr>
-                  <td>{{ row.pymnt_inv_id }}</td>
+                  <td class="mono">{{ row.pymnt_inv_id }}</td>
                   <td>{{ row.pymnt_ba_id }}</td>
                   <td>{{ row.payment_state }}</td>
                 </tr>
                 {% endfor %}
-              {% else %}
-                <tr><td colspan="3" class="empty">Kayıt yok</td></tr>
-              {% endif %}
+              {% else %}<tr><td colspan="3" class="empty">Kayit yok</td></tr>{% endif %}
             </tbody>
           </table>
         </article>
 
         <article class="panel">
-          <div class="panel-title">PCC Pending Payment</div>
+          <div class="panel-header">
+            <div class="panel-title">PCC Pending Payment</div>
+            <span class="panel-badge">PCC_PENDING_PAYMENT</span>
+          </div>
           <table>
-            <thead>
-              <tr>
-                <th>INV_NUMBER</th>
-                <th>Durum</th>
-              </tr>
-            </thead>
+            <thead><tr><th>INV_NUMBER</th><th>Durum</th></tr></thead>
             <tbody>
               {% if result.pending_rows %}
                 {% for row in result.pending_rows %}
                 <tr>
-                  <td>{{ row.inv_number }}</td>
+                  <td class="mono">{{ row.inv_number }}</td>
                   <td>{{ row.state }}</td>
                 </tr>
                 {% endfor %}
-              {% else %}
-                <tr><td colspan="2" class="empty">Kayıt yok</td></tr>
-              {% endif %}
+              {% else %}<tr><td colspan="2" class="empty">Kayit yok</td></tr>{% endif %}
             </tbody>
           </table>
         </article>
       </section>
+
       {% else %}
       <section class="empty-state">
-        <div class="empty-icon">⌁</div>
-        <h2>BA_ID girip demo akışını başlat</h2>
-        <p>Bu ekranda önce Vodafone temalı arayüzü göreceksin, sonra mock verilerle analiz sonucu oluşacak.</p>
+        <div class="empty-icon">&#9776;</div>
+        <h2>BA_ID girerek analizi baslat</h2>
+        <p>Runbook kurallarina gore publish, invoice, BPPS, payment ve activity kontrolu yapilir; sonuc olarak oneri uretilir.</p>
       </section>
       {% endif %}
     </main>
+    </div>
   </div>
 </body>
 </html>
