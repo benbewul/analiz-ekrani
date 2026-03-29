@@ -29,9 +29,14 @@ http://127.0.0.1:5000
 
 ## Docker ile local test
 ```bash
-docker build -t pcc-gozcu-demo .
-docker run -p 5000:5000 pcc-gozcu-demo
+docker build -t pcc-analiz-tool .
+docker run -p 8080:8080 pcc-analiz-tool
 ```
+
+Tarayıcı: `http://127.0.0.1:8080`
+
+## OpenShift uygulama adı
+`Jenkinsfile` içinde `APP_NAME=pcc-analiz-tool`; route örneği: `pcc-analiz-tool-<proje>.apps.<cluster>/`
 
 ## Jenkins / OpenShift pipeline mantığı
 Bu projedeki `Jenkinsfile` şu akışı izler:
