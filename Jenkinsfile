@@ -29,7 +29,9 @@ pipeline {
         stage('Cleanup Old Resources') {
             steps {
                 sh '''
+                oc delete route/${APP_NAME} --ignore-not-found=true || true
                 oc delete all -l app=${APP_NAME} --ignore-not-found=true || true
+                oc delete svc/${APP_NAME} deployment/${APP_NAME} --ignore-not-found=true || true
                 oc delete buildconfig/${APP_NAME} --ignore-not-found=true || true
                 oc delete imagestream/${APP_NAME} --ignore-not-found=true || true
                 '''
@@ -48,13 +50,18 @@ pipeline {
         stage('Deploy App') {
             steps {
                 sh '''
-                oc new-app ${APP_NAME}:${IMAGE_TAG} --name=${APP_NAME} || true
-                oc expose service/${APP_NAME} || true
-                oc set env deployment/${APP_NAME} PYTHONUNBUFFERED=1 || true
-                oc rollout latest deployment/${APP_NAME} || true
+                set -e
+                oc new-app ${APP_NAME}:${IMAGE_TAG} --name=${APP_NAME} -l app=${APP_NAME}
+                oc label deployment/${APP_NAME} app=${APP_NAME} --overwrite
+                oc label svc/${APP_NAME} app=${APP_NAME} --overwrite
+                oc set env deployment/${APP_NAME} PYTHONUNBUFFERED=1 PORT=8080
+                oc delete route/${APP_NAME} --ignore-not-found=true
+                oc expose svc/${APP_NAME} --name=${APP_NAME}
+                oc rollout status deployment/${APP_NAME} --timeout=300s
                 oc get pods
-                oc get svc
-                oc get route
+                oc get svc ${APP_NAME} -o wide
+                oc get route ${APP_NAME} -o wide
+                echo "Route URL: http://$(oc get route ${APP_NAME} -o jsonpath='{.spec.host}')/"
                 '''
             }
         }
