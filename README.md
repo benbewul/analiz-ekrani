@@ -7,8 +7,7 @@ Vodafone temalı, veritabanına bağlanmayan demo sürümüdür. BA_ID girildiğ
 - `templates/index.html` → arayüz
 - `static/style.css` → Vodafone temalı stil
 - `Dockerfile` → container (Gunicorn, 8080)
-- `openshift/application.yaml` → Deployment + Service + Route (şablon; çalışan [InvoiceTool](https://github.com/benbewul/InvoiceTool) ile aynı port/health fikri)
-- `Jenkinsfile` → image build + `oc apply` ile deploy
+- `Jenkinsfile` → OpenShift: `oc new-build` / `start-build` / `new-app` / `expose` (çalışan analiz-ekrani pipeline ile aynı akış)
 - `.dockerignore` → gereksiz dosyaları build dışı bırakır
 
 ## Local çalıştırma
@@ -40,13 +39,14 @@ Tarayıcı: `http://127.0.0.1:8080`
 `Jenkinsfile` içinde `APP_NAME=pcc-analiz-tool`; route örneği: `pcc-analiz-tool-<proje>.apps.<cluster>/`
 
 ## Jenkins / OpenShift pipeline mantığı
-Bu projedeki `Jenkinsfile` şu akışı izler:
-1. Repo'yu checkout eder
-2. `oc login` ile cluster'a bağlanır
-3. Eski app/build kaynaklarını temizler
-4. Dockerfile üzerinden binary build başlatır
-5. Image'dan app oluşturur
-6. Service ve Route açar
+`environment` içindeki `GIT_URL` varsayılan olarak analiz-ekrani reposunu çeker; repo adresini değiştirebilirsin. Akış:
+1. `git` ile checkout
+2. `oc login` + proje
+3. `oc delete all -l app=...` ve BuildConfig / ImageStream temizliği
+4. `oc new-build --binary --strategy=docker` + `oc start-build --from-dir=.`
+5. `oc new-app <is>:latest` + `oc expose service`
+
+**Multibranch:** Job zaten repoyu checkout ediyorsa, `Checkout` aşamasında `checkout scm` kullan ve `GIT_URL` adımını kaldırabilirsin.
 
 ### Gereken Jenkins credential
 - `ocp-token` → OpenShift token'ı `Secret text` olarak tanımlanmalı
