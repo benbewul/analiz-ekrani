@@ -11,6 +11,11 @@
 <body>
   <div class="layout">
     <div class="topbar">
+      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Menu">
+        <span class="toggle-bar"></span>
+        <span class="toggle-bar"></span>
+        <span class="toggle-bar"></span>
+      </button>
       <img class="topbar-logo" src="{{ url_for('static', filename='vodafone-logo.png') }}" alt="Vodafone" decoding="async">
       <div class="topbar-title">PCC ActionBoard</div>
       <div class="topbar-right">Collection Decision Support</div>
@@ -19,16 +24,16 @@
     <aside class="sidebar">
       <nav class="menu">
         <a class="menu-item active" href="#">
-          <span class="menu-icon">&#9632;</span> Dashboard
+          <span class="menu-icon">&#9632;</span><span class="menu-text">Dashboard</span>
         </a>
         <a class="menu-item" href="#">
-          <span class="menu-icon">&#9654;</span> BA Overview
+          <span class="menu-icon">&#9654;</span><span class="menu-text">BA Overview</span>
         </a>
         <a class="menu-item" href="#">
-          <span class="menu-icon">&#9733;</span> Aksiyonlar
+          <span class="menu-icon">&#9733;</span><span class="menu-text">Aksiyonlar</span>
         </a>
         <a class="menu-item" href="#">
-          <span class="menu-icon">&#9998;</span> Oneriler
+          <span class="menu-icon">&#9998;</span><span class="menu-text">Oneriler</span>
         </a>
       </nav>
 
@@ -238,5 +243,10 @@
     </main>
     </div>
   </div>
+<script>
+document.getElementById('sidebarToggle').addEventListener('click',function(){
+  document.querySelector('.body-row').classList.toggle('sidebar-collapsed');
+});
+</script>
 </body>
 </html>
