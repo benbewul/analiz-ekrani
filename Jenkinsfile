@@ -58,9 +58,11 @@ pipeline {
                 # Varsayılan veya yanlış HTTP probe trafiği keser; 8080 TCP readiness yeterli
                 oc set probe deployment/${APP_NAME} --remove --readiness --liveness 2>/dev/null || true
                 oc set probe deployment/${APP_NAME} --readiness --get-url=http://:8080/ --initial-delay-seconds=5 --timeout-seconds=5 --period-seconds=10
-                oc delete route/${APP_NAME} --ignore-not-found=true
-                oc expose svc/${APP_NAME} --name=${APP_NAME}
                 oc rollout status deployment/${APP_NAME} --timeout=300s
+                oc delete route/${APP_NAME} --ignore-not-found=true
+                # Önce pod hazır, sonra route (yoksa router boş backend görür)
+                oc expose svc/${APP_NAME} --name=${APP_NAME} --port=8080
+                oc patch route/${APP_NAME} -p '{"spec":{"tls":{"termination":"edge","insecureEdgeTerminationPolicy":"Allow"}}}'
                 oc get pods -l app=${APP_NAME} -o wide
                 oc get endpoints ${APP_NAME} -o wide
                 oc get svc ${APP_NAME} -o wide
