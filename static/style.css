@@ -26,12 +26,12 @@ body{
 
 .topbar{
   background:#fff;border-bottom:1px solid var(--line);
-  padding:0 28px;height:60px;
+  padding:0 28px;height:72px;
   display:flex;align-items:center;gap:18px;flex-shrink:0;
 }
-.topbar-logo{height:36px;object-fit:contain}
+.topbar-logo{height:46px;object-fit:contain}
 .topbar-title{
-  font-size:17px;font-weight:800;letter-spacing:-.02em;color:var(--navy);
+  font-size:18px;font-weight:800;letter-spacing:-.02em;color:var(--navy);
   border-left:2px solid var(--line);padding-left:18px;
 }
 .topbar-right{
