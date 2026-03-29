@@ -24,9 +24,13 @@ pipeline {
                     oc project ${OCP_PROJ}
 
                     echo "Eski app siliniyor..."
+                    oc delete route/${APP_NAME} --ignore-not-found=true || true
+                    oc delete svc/${APP_NAME} --ignore-not-found=true || true
+                    oc delete deployment/${APP_NAME} --ignore-not-found=true || true
                     oc delete all -l app=${APP_NAME} --ignore-not-found=true || true
                     oc delete bc/${APP_NAME} --ignore-not-found=true || true
                     oc delete is/${APP_NAME} --ignore-not-found=true || true
+                    sleep 5
 
                     echo "Build oluşturuluyor..."
                     oc new-build --name=${APP_NAME} --binary --strategy=docker || true
@@ -39,6 +43,7 @@ pipeline {
 
                     echo "Route açılıyor..."
                     oc expose service/${APP_NAME} || true
+                    oc patch route/${APP_NAME} -p '{"spec":{"tls":{"termination":"edge","insecureEdgeTerminationPolicy":"Redirect"}}}' || true
 
                     oc get pods
                     oc get svc
