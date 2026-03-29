@@ -3,26 +3,23 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>PCC Gözcü Demo</title>
+  <title>PCC ActionBoard (Demo)</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
   <div class="layout">
     <aside class="sidebar">
       <div class="brand">
-        <div class="logo-mark">
-          <span class="ring"></span>
-          <span class="dot"></span>
-        </div>
+        <img class="brand-logo" src="{{ url_for('static', filename='vodafone-logo.png') }}" alt="Vodafone" width="56" height="56" decoding="async">
         <div class="brand-text">
-          <div class="brand-name">vodafone</div>
-          <div class="brand-sub">PCC Gözcü Demo</div>
+          <div class="brand-name" aria-label="Vodafone">vodafone</div>
+          <div class="brand-sub">PCC ActionBoard · Demo</div>
         </div>
       </div>
 
       <nav class="menu">
         <a class="menu-item active" href="#">Dashboard</a>
-        <a class="menu-item" href="#">BA_ID Analiz</a>
+        <a class="menu-item" href="#">BA overview</a>
         <a class="menu-item" href="#">Aksiyon Geçmişi</a>
         <a class="menu-item" href="#">Öneriler</a>
       </nav>
@@ -37,7 +34,7 @@
       <header class="hero">
         <div>
           <div class="eyebrow">Collection Decision Support</div>
-          <h1>PCC Gözcü – BA_ID Analiz Ekranı</h1>
+          <h1>PCC ActionBoard</h1>
           <p>BA_ID bazlı publish, invoice, payment, BPPS ve action akışını tek ekranda yorumlayan demo arayüz.</p>
         </div>
         <div class="hero-badge">Demo v1</div>

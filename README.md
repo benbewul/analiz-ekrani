@@ -1,6 +1,6 @@
-# PCC Gözcü Demo
+# PCC ActionBoard (Demo)
 
-Vodafone temalı, veritabanına bağlanmayan demo sürümüdür. BA_ID girildiğinde hazır mock senaryolarla analiz ekranı gösterir.
+Vodafone temalı, veritabanına bağlanmayan demo sürümüdür. BA_ID girildiğinde hazır mock senaryolarla özet ekranı gösterir.
 
 ## İçerik
 - `app.py` → Flask demo uygulaması

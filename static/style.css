@@ -31,21 +31,12 @@ body{
   gap:28px;
 }
 .brand{display:flex; gap:14px; align-items:center}
-.logo-mark{
-  position:relative;
-  width:56px; height:56px;
-}
-.logo-mark .ring{
-  position:absolute; inset:0;
-  border:9px solid var(--vf-red);
-  border-left-color:transparent;
-  border-bottom-color:transparent;
-  border-radius:50%;
-  transform:rotate(-20deg);
-}
-.logo-mark .dot{
-  position:absolute; width:14px; height:14px; background:var(--vf-red); border-radius:50%;
-  top:8px; right:7px;
+.brand-logo{
+  width:56px;
+  height:56px;
+  object-fit:contain;
+  flex-shrink:0;
+  filter:drop-shadow(0 6px 18px rgba(230,0,0,.22));
 }
 .brand-name{
   font-size:28px; font-weight:800; letter-spacing:-0.02em; text-transform:lowercase;
