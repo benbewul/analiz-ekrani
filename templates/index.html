@@ -4,24 +4,36 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>PCC ActionBoard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
   <div class="layout">
     <div class="topbar">
-      <img class="topbar-logo" src="{{ url_for('static', filename='vodafone-logo.png') }}" alt="Vodafone" height="36" decoding="async">
+      <img class="topbar-logo" src="{{ url_for('static', filename='vodafone-logo.png') }}" alt="Vodafone" decoding="async">
+      <div class="topbar-title">PCC ActionBoard</div>
+      <div class="topbar-right">Collection Decision Support</div>
     </div>
     <div class="body-row">
     <aside class="sidebar">
       <nav class="menu">
-        <a class="menu-item active" href="#">Dashboard</a>
-        <a class="menu-item" href="#">BA Overview</a>
-        <a class="menu-item" href="#">Aksiyon Gecmisi</a>
-        <a class="menu-item" href="#">Oneriler</a>
+        <a class="menu-item active" href="#">
+          <span class="menu-icon">&#9632;</span> Dashboard
+        </a>
+        <a class="menu-item" href="#">
+          <span class="menu-icon">&#9654;</span> BA Overview
+        </a>
+        <a class="menu-item" href="#">
+          <span class="menu-icon">&#9733;</span> Aksiyonlar
+        </a>
+        <a class="menu-item" href="#">
+          <span class="menu-icon">&#9998;</span> Oneriler
+        </a>
       </nav>
 
       <div class="sidebar-ids">
-        <strong>Ornek BA_ID'ler</strong>
+        <div class="sidebar-ids-title">Ornek BA_ID</div>
         <div class="id-chips">
           <span class="id-chip">6092902934</span>
           <span class="id-chip">6070166156</span>
@@ -35,19 +47,13 @@
     </aside>
 
     <main class="main">
-      <header class="hero">
-        <div>
-          <div class="eyebrow">Collection Decision Support</div>
-          <h1>PCC ActionBoard</h1>
-          <p>BA_ID bazli publish, invoice, payment, BPPS ve activity akisini tek ekranda analiz eder; runbook kurallarina gore oneri uretir.</p>
-        </div>
-      </header>
-
       <section class="search-panel">
         <form method="post" class="search-form">
-          <label for="ba_id">BA_ID girin</label>
           <div class="search-row">
-            <input id="ba_id" name="ba_id" type="text" placeholder="Ornek: 6092902934" value="{{ ba_id }}" autocomplete="off">
+            <div class="search-input-wrap">
+              <span class="search-icon">&#128269;</span>
+              <input id="ba_id" name="ba_id" type="text" placeholder="BA_ID girin..." value="{{ ba_id }}" autocomplete="off">
+            </div>
             <button type="submit">Analiz Et</button>
           </div>
         </form>
@@ -62,7 +68,7 @@
           {% elif result.summary_type == 'info' %}&#8505;
           {% else %}&#8226;{% endif %}
         </div>
-        <div>
+        <div class="summary-body">
           <div class="summary-title">{{ result.summary_title }}</div>
           <p>{{ result.summary_text }}</p>
         </div>
@@ -71,6 +77,7 @@
       <section class="cards">
         {% for card in result.cards %}
         <article class="card {{ card.status }}">
+          <div class="card-dot"></div>
           <div class="card-label">{{ card.title }}</div>
           <div class="card-value">{{ card.value }}</div>
         </article>
@@ -160,7 +167,7 @@
         <article class="panel">
           <div class="panel-header">
             <div class="panel-title">Activity</div>
-            <span class="panel-badge">ACCOUNTACTIVITYPUBLISH</span>
+            <span class="panel-badge">ACTIVITY_PUBLISH</span>
           </div>
           <table>
             <thead><tr><th>MOC_BAR</th><th>Not</th></tr></thead>
@@ -225,7 +232,7 @@
       <section class="empty-state">
         <div class="empty-icon">&#9776;</div>
         <h2>BA_ID girerek analizi baslat</h2>
-        <p>Runbook kurallarina gore publish, invoice, BPPS, payment ve activity kontrolu yapilir; sonuc olarak oneri uretilir.</p>
+        <p>Publish, invoice, BPPS, payment ve activity kontrolu yapilir; runbook kurallarina gore oneri uretilir.</p>
       </section>
       {% endif %}
     </main>
