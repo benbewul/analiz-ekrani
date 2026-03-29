@@ -30,7 +30,7 @@ spec:
               value: "1"
           readinessProbe:
             httpGet:
-              path: /
+              path: /health
               port: http
               scheme: HTTP
             initialDelaySeconds: 5

@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, render_template, request
+from flask import Flask, jsonify, render_template, request
 
 app = Flask(__name__)
 
@@ -99,6 +99,12 @@ DEFAULT_CASE = {
         "Şu an amaç ekran akışını göstermek.",
     ],
 }
+
+@app.get("/health")
+def health():
+    """OpenShift readiness; InvoiceTool /health ile aynı rol."""
+    return jsonify({"status": "ok"})
+
 
 @app.route("/", methods=["GET", "POST"])
 def dashboard():

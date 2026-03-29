@@ -13,4 +13,5 @@ COPY . .
 
 EXPOSE 8080
 
-CMD ["sh", "-c", "exec gunicorn --bind 0.0.0.0:${PORT:-8080} --workers 2 --access-logfile - --error-logfile - app:app"]
+# InvoiceTool gibi sabit 8080; shell yok → küçük yüzey alanı
+CMD ["gunicorn", "--bind", "0.0.0.0:8080", "--workers", "2", "--access-logfile", "-", "--error-logfile", "-", "app:app"]

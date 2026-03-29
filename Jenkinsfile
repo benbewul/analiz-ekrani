@@ -32,8 +32,6 @@ pipeline {
                 oc delete route/${APP_NAME} --ignore-not-found=true || true
                 oc delete all -l app=${APP_NAME} --ignore-not-found=true || true
                 oc delete svc/${APP_NAME} deployment/${APP_NAME} --ignore-not-found=true || true
-                oc delete networkpolicy/${APP_NAME}-allow-http --ignore-not-found=true || true
-                oc delete networkpolicy/allow-from-openshift-ingress --ignore-not-found=true || true
                 oc delete buildconfig/${APP_NAME} --ignore-not-found=true || true
                 oc delete imagestream/${APP_NAME} --ignore-not-found=true || true
                 '''
@@ -61,7 +59,6 @@ pipeline {
                 fi
                 IMG="${REG}:${IMAGE_TAG}"
                 sed -e "s|__APP_NAME__|${APP_NAME}|g" -e "s|__IMAGE__|${IMG}|g" openshift/application.yaml | oc apply -f -
-                sed -e "s|__APP_NAME__|${APP_NAME}|g" openshift/networkpolicy.yaml | oc apply -f -
                 oc rollout status deployment/${APP_NAME} --timeout=300s
                 oc get pods -l app=${APP_NAME} -o wide
                 oc get endpoints ${APP_NAME} -o wide

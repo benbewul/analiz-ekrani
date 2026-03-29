@@ -7,8 +7,7 @@ Vodafone temalı, veritabanına bağlanmayan demo sürümüdür. BA_ID girildiğ
 - `templates/index.html` → arayüz
 - `static/style.css` → Vodafone temalı stil
 - `Dockerfile` → container (Gunicorn, 8080)
-- `openshift/application.yaml` → Deployment + Service + Route (şablon)
-- `openshift/networkpolicy.yaml` → uygulama pod’larına 8080 ingress
+- `openshift/application.yaml` → Deployment + Service + Route (şablon; çalışan [InvoiceTool](https://github.com/benbewul/InvoiceTool) ile aynı port/health fikri)
 - `Jenkinsfile` → image build + `oc apply` ile deploy
 - `.dockerignore` → gereksiz dosyaları build dışı bırakır
 
