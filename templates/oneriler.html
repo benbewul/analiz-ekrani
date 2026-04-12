@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% block title %}Oneriler - PCC ActionBoard{% endblock %}
+
+{% block content %}
+      <div class="page-header">
+        <h1 class="page-title">Runbook Kurallari</h1>
+        <p class="page-desc">Sistem tarafindan uygulanan karar kurallari. Dashboard'da BA_ID analiz edildiginde bu kurallar otomatik olarak degerlendirilir.</p>
+      </div>
+
+      <section class="rules-list">
+
+        <article class="rule-card">
+          <div class="rule-header">
+            <span class="rule-number">1</span>
+            <div class="rule-title">Odeme Kontrolu</div>
+          </div>
+          <div class="rule-body">
+            <div class="rule-condition">
+              <span class="rule-label">Kosul</span>
+              <p>PCC_PAYMENT tablosunda ilgili fatura icin kayit var mi?</p>
+            </div>
+            <div class="rule-result">
+              <span class="rule-label">Sonuc</span>
+              <p><span class="chip success">Odeme kaydi bulundu</span> veya <span class="chip danger">Odeme bulunamadi</span></p>
+            </div>
+          </div>
+        </article>
+
+        <article class="rule-card">
+          <div class="rule-header">
+            <span class="rule-number">2</span>
+            <div class="rule-title">BPPS Eslesmesi</div>
+          </div>
+          <div class="rule-body">
+            <div class="rule-condition">
+              <span class="rule-label">Kosul</span>
+              <p>BPPS.BILL tablosunda fatura numarasiyla eslesen kayit var mi? bill_status degeri nedir?</p>
+            </div>
+            <div class="rule-result">
+              <span class="rule-label">Sonuc</span>
+              <p><span class="chip warning">bill_status = 1</span> ise fatura BPPS'te eslesti ama henuz odenmedi. <span class="chip success">bill_status = 0</span> ise odeme tamamlandi.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="rule-card">
+          <div class="rule-header">
+            <span class="rule-number">3</span>
+            <div class="rule-title">MOC Barring Durumu</div>
+          </div>
+          <div class="rule-body">
+            <div class="rule-condition">
+              <span class="rule-label">Kosul</span>
+              <p>Action ID 6 (Auto MOC Barring) WAITING (status=0) durumunda mi?</p>
+            </div>
+            <div class="rule-result">
+              <span class="rule-label">Sonuc</span>
+              <p>Evet ise: <span class="chip warning">Hat bloke bekleniyor</span>. Odeme yapilirsa Action 32 (Unbarring) tetiklenmelidir.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="rule-card">
+          <div class="rule-header">
+            <span class="rule-number">4</span>
+            <div class="rule-title">Unbarring Kontrolu</div>
+          </div>
+          <div class="rule-body">
+            <div class="rule-condition">
+              <span class="rule-label">Kosul</span>
+              <p>Action 32 (MOC Unbarring) WAITING (status=0) durumunda mi?</p>
+            </div>
+            <div class="rule-result">
+              <span class="rule-label">Sonuc</span>
+              <p>Evet ise: <span class="chip info">Unbarring bekleniyor</span>. Odeme algilandi, blogun kalkmasi bekleniyor.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="rule-card">
+          <div class="rule-header">
+            <span class="rule-number">5</span>
+            <div class="rule-title">Suspension Kontrolu</div>
+          </div>
+          <div class="rule-body">
+            <div class="rule-condition">
+              <span class="rule-label">Kosul</span>
+              <p>Action 22 (Suspension) SUCCESS (status=2) durumunda mi?</p>
+            </div>
+            <div class="rule-result">
+              <span class="rule-label">Sonuc</span>
+              <p><span class="chip danger">Hat askiya alinmis</span>. Odeme yapilsa bile hat otomatik acilmaz, manuel islem gerekebilir.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="rule-card">
+          <div class="rule-header">
+            <span class="rule-number">6</span>
+            <div class="rule-title">Cancellation Kontrolu</div>
+          </div>
+          <div class="rule-body">
+            <div class="rule-condition">
+              <span class="rule-label">Kosul</span>
+              <p>Action 25 (Cancellation) SUCCESS (status=2) durumunda mi?</p>
+            </div>
+            <div class="rule-result">
+              <span class="rule-label">Sonuc</span>
+              <p><span class="chip danger">Hat iptal edilmis</span>. Geri donus mumkun degildir.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="rule-card">
+          <div class="rule-header">
+            <span class="rule-number">7</span>
+            <div class="rule-title">Pending Payment Kontrolu</div>
+          </div>
+          <div class="rule-body">
+            <div class="rule-condition">
+              <span class="rule-label">Kosul</span>
+              <p>PCC_PENDING_PAYMENT tablosunda ilgili fatura icin kayit var mi?</p>
+            </div>
+            <div class="rule-result">
+              <span class="rule-label">Sonuc</span>
+              <p>Evet ise: <span class="chip info">Odeme isleniyor</span>. Henuz kesinlesmemis bir odeme islemi mevcut.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="rule-card">
+          <div class="rule-header">
+            <span class="rule-number">8</span>
+            <div class="rule-title">Activity MOC BAR Kontrolu</div>
+          </div>
+          <div class="rule-body">
+            <div class="rule-condition">
+              <span class="rule-label">Kosul</span>
+              <p>ACCOUNTACTIVITYPUBLISH tablosunda moc_bar = 9 degeri var mi?</p>
+            </div>
+            <div class="rule-result">
+              <span class="rule-label">Sonuc</span>
+              <p><span class="chip danger">MOC BAR = 9</span> ise hat aktif olarak bloke durumunda. Blok kaldirilana kadar giden arama yapilamaz.</p>
+            </div>
+          </div>
+        </article>
+
+      </section>
+{% endblock %}

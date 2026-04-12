@@ -1,57 +1,6 @@
-<!doctype html>
-<html lang="tr">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>PCC ActionBoard</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-  <div class="layout">
-    <div class="topbar">
-      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Menu">
-        <span class="toggle-bar"></span>
-        <span class="toggle-bar"></span>
-        <span class="toggle-bar"></span>
-      </button>
-      <img class="topbar-logo" src="{{ url_for('static', filename='vodafone-logo.png') }}" alt="Vodafone" decoding="async">
-      <div class="topbar-title">PCC ActionBoard</div>
-      <div class="topbar-right">Collection Decision Support</div>
-    </div>
-    <div class="body-row">
-    <aside class="sidebar">
-      <nav class="menu">
-        <a class="menu-item active" href="#">
-          <span class="menu-icon">&#9632;</span><span class="menu-text">Dashboard</span>
-        </a>
-        <a class="menu-item" href="#">
-          <span class="menu-icon">&#9654;</span><span class="menu-text">BA Overview</span>
-        </a>
-        <a class="menu-item" href="#">
-          <span class="menu-icon">&#9733;</span><span class="menu-text">Aksiyonlar</span>
-        </a>
-        <a class="menu-item" href="#">
-          <span class="menu-icon">&#9998;</span><span class="menu-text">Oneriler</span>
-        </a>
-      </nav>
+{% extends "base.html" %}
 
-      <div class="sidebar-ids">
-        <div class="sidebar-ids-title">Ornek BA_ID</div>
-        <div class="id-chips">
-          <span class="id-chip">6092902934</span>
-          <span class="id-chip">6070166156</span>
-          <span class="id-chip">6111111111</span>
-          <span class="id-chip">6222222222</span>
-          <span class="id-chip">6333333333</span>
-          <span class="id-chip">6444444444</span>
-          <span class="id-chip">6555555555</span>
-        </div>
-      </div>
-    </aside>
-
-    <main class="main">
+{% block content %}
       <section class="search-panel">
         <form method="post" class="search-form">
           <div class="search-row">
@@ -240,13 +189,4 @@
         <p>Publish, invoice, BPPS, payment ve activity kontrolu yapilir; runbook kurallarina gore oneri uretilir.</p>
       </section>
       {% endif %}
-    </main>
-    </div>
-  </div>
-<script>
-document.getElementById('sidebarToggle').addEventListener('click',function(){
-  document.querySelector('.body-row').classList.toggle('sidebar-collapsed');
-});
-</script>
-</body>
-</html>
+{% endblock %}

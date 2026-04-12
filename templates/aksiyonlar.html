@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% block title %}Aksiyonlar - PCC ActionBoard{% endblock %}
+
+{% block content %}
+      <div class="page-header">
+        <h1 class="page-title">Aksiyon Referansi</h1>
+        <p class="page-desc">PCC sisteminde kullanilan aksiyon tipleri ve status kodlarinin aciklamalari.</p>
+      </div>
+
+      <section class="grid two">
+        <article class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Aksiyon Tipleri</div>
+            <span class="panel-badge">K_EAI_QUEUE_PUBLISH</span>
+          </div>
+          <table>
+            <thead>
+              <tr><th>Action ID</th><th>Aksiyon Adi</th><th>Aciklama</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="chip danger">6</span></td>
+                <td><strong>Auto MOC Barring</strong></td>
+                <td>Giden aramalari otomatik olarak bloke eder. Odeme yapilmadigi durumlarda tetiklenir.</td>
+              </tr>
+              <tr>
+                <td><span class="chip warning">22</span></td>
+                <td><strong>Suspension</strong></td>
+                <td>Hat askiya alinir. MOC Barring sonrasi odeme yapilmazsa bir sonraki adim.</td>
+              </tr>
+              <tr>
+                <td><span class="chip danger">25</span></td>
+                <td><strong>Cancellation</strong></td>
+                <td>Hat tamamen iptal edilir. Geri donusu yoktur.</td>
+              </tr>
+              <tr>
+                <td><span class="chip info">26</span></td>
+                <td><strong>Transfer to Legal</strong></td>
+                <td>Hesap hukuki takip surecine aktarilir.</td>
+              </tr>
+              <tr>
+                <td><span class="chip info">27</span></td>
+                <td><strong>Out Dunning</strong></td>
+                <td>Tahsilat surecinden cikarilir. Ozel durumlarda kullanilir.</td>
+              </tr>
+              <tr>
+                <td><span class="chip success">32</span></td>
+                <td><strong>MOC Unbarring</strong></td>
+                <td>Giden arama blogu kaldirilir. Odeme yapildiktan sonra tetiklenir.</td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Status Kodlari</div>
+            <span class="panel-badge">ACTION_STATUS</span>
+          </div>
+          <table>
+            <thead>
+              <tr><th>Kod</th><th>Durum</th><th>Aciklama</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="chip warning">0</span></td>
+                <td><strong>WAITING</strong></td>
+                <td>Aksiyon henuz islenmedi, kuyrukta bekliyor.</td>
+              </tr>
+              <tr>
+                <td><span class="chip info">1</span></td>
+                <td><strong>UPSTREAM</strong></td>
+                <td>Aksiyon ust sisteme (BSS/CRM) iletildi, yanit bekleniyor.</td>
+              </tr>
+              <tr>
+                <td><span class="chip success">2</span></td>
+                <td><strong>SUCCESS</strong></td>
+                <td>Aksiyon basariyla tamamlandi.</td>
+              </tr>
+              <tr>
+                <td><span class="chip info">4</span></td>
+                <td><strong>UPSTREAM</strong></td>
+                <td>Alternatif upstream kodu. Status 1 ile ayni anlama gelir.</td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+      </section>
+
+      <section class="ref-note">
+        <article class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Siralama Aksiyonlari</div>
+            <span class="panel-badge">ORDER_ACTION_IDS</span>
+          </div>
+          <div class="ref-note-body">
+            <p>Asagidaki aksiyonlar <strong>siralama onceligi</strong> tasiyan aksiyonlardir. Birden fazla oldugunda en yuksek oncelikli olan degerlendirilir:</p>
+            <div class="ref-chips">
+              <span class="chip danger">6 - Auto MOC Barring</span>
+              <span class="chip warning">22 - Suspension</span>
+              <span class="chip danger">25 - Cancellation</span>
+            </div>
+            <p class="ref-sub">Oncelik sirasi: Cancellation (25) &gt; Suspension (22) &gt; MOC Barring (6)</p>
+          </div>
+        </article>
+      </section>
+{% endblock %}
